@@ -184,9 +184,12 @@ p_child = p_element.at_xpath("//child::*") # selects first child
 ## 扩展使用
 ### 写入样式
 
-使用方式:
+使用方式，类似下面：
 ```ruby
-gem 'docx', '0.6.3-rcc', :git => 'https://github.com/rccgroup/docx.git', :branch => 'master'
+# 注意使用最新版
+gem 'docx', :git => 'https://github.com/rccgroup/docx.git', :tag => 'v0.6.3-rcc'
+
+gem 'docx', :git => 'https://github.com/rccgroup/docx.git', :branch => 'master'
 ```
 
 支持传入样式：
@@ -236,11 +239,15 @@ end
 
 doc.bookmarks["batch_index"].insert_multiple_lines(
   ["行业-1", "行业-2", "行业-3"],
-  formatting.merge(font_size: 8, underline: false, )
+  formatting.merge(font_size: 8, underline: false)
 )
 
 doc.save('/Users/rcc0016748/Project/phone-cloud/format_example-edited.docx')
 ```
+
+
+参考一个好几年前未合的merge request: https://github.com/ruby-docx/docx/pull/26
+
 
 ## Development
 
