@@ -5,6 +5,8 @@ module Docx
     include Formatting
 
     def apply_formatting(formatting)
+      formatting ||= {}
+
       if (formatting[:font])
         font_node = add_property('rFonts')
         font_node["w:ascii"] = formatting[:font]

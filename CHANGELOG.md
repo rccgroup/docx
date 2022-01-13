@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.6.4-rcc
+
+- insert_multiple_texts_with_formatting
+- insert_multiple_lines_with_formatting
+
+```ruby
+# 文本的样式
+formatting = {
+  italic: false,
+  underline: true,
+  bold: true,
+  font: 'Times New Roman',
+  font_size: 20,
+  color: 'FF0000'
+}
+
+# 段落的样式 -- xml中缩进的格式 <w:ind w:left="420" w:leftChars="0" w:firstLine="411" w:firstLineChars="196" />
+paragraph_formatting = { ind: { left: 420, leftChars: 0, firstLine: 411 } }
+
+
+base_doc.bookmarks['context'].insert_multiple_texts_with_formatting([
+  {text: '工程信息订阅了'},
+  {text: '2', formatting: formatting},
+  {text: '套，价格是'},
+  {text: '1299', formatting: formatting},
+  {text: '元。'}
+])
+
+base_doc.bookmarks['notes'].insert_multiple_lines_with_formatting([
+  {text: '第一句'},
+  {text: '第二句', formatting: formatting.merge(paragraph_formatting)},
+  {text: '第三句'}
+])
+```
+
 ## 0.6.3-rcc
 
 ### add feature
