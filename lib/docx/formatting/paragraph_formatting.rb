@@ -7,19 +7,28 @@ module Docx
     def apply_formatting(formatting)
       formatting ||= {}
 
-      # 设置段落属性 -- 缩进
-      if (formatting[:ind])
-        ind_node = add_property('ind')
-
-        # ind_node["w:left"] = "0"
-        # ind_node["w:leftChars"] = "0"
-        # ind_node["w:firstLine"] = "0"
-        # ind_node["w:firstLineChars"] = "0"
-        # <w:ind w:left="420" w:leftChars="0" w:firstLine="411" w:firstLineChars="196" />
-        formatting[:ind].each do |key, value|
-          ind_node["w:#{key}"] = value
+      # 设置段落属性 -- 缩进等
+      for_paragraph = formatting[:paragraph] || {}
+      for_paragraph.each do |prop_name, prop_value|
+        prop_node = add_property(prop_name)
+        prop_value.each do |sub_name, sub_value|
+          prop_node["w:#{sub_name}"] = sub_value
         end
       end
+
+      # 设置单个
+      # if (formatting[:ind])
+      #   ind_node = add_property('ind')
+
+      #   # ind_node["w:left"] = "0"
+      #   # ind_node["w:leftChars"] = "0"
+      #   # ind_node["w:firstLine"] = "0"
+      #   # ind_node["w:firstLineChars"] = "0"
+      #   # <w:ind w:left="420" w:leftChars="0" w:firstLine="411" w:firstLineChars="196" />
+      #   formatting[:ind].each do |key, value|
+      #     ind_node["w:#{key}"] = value
+      #   end
+      # end
 
       if (formatting[:alignment])
         alignment_node = add_property('jc')
