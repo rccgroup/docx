@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.6.5-rcc
+
+- insert_multiple_lines_with_formatting 支持传入 texts, 控制插入同一段落有不同样式的文本。
+- paragraph.rb 新增 set_multi_texts 方法。
+
+```ruby
+base_doc.bookmarks['notes'].insert_multiple_lines_with_formatting([
+  {text: '第一句'},
+  {text: '第二句', formatting: formatting},
+  {text: '第三句'},
+  {
+    texts: [
+      {text: '第一部分', formatting: {italic: true}},
+      {text: '第二部分', formatting: {color: 'FF0000'},
+      {text: '第三部分', formatting: {underline: true}}
+    ]
+  }
+])
+```
+
 ## 0.6.4-rcc
 
 - insert_multiple_texts_with_formatting

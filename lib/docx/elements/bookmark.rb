@@ -27,8 +27,8 @@ module Docx
         text_run.set_text("#{text_run.text}#{text}", formatting)
       end
 
-
-      # 一整批插入到书签后面，可以为各部分文字定自己的样式
+      # 【新增方法】一整批插入到书签后面，可以为各部分文字定自己的样式。 Oliver.chen 2022-02-11
+      #
       # base_doc.bookmarks['context'].insert_multiple_texts_after([
       #   { text: '工程信息订阅了' },
       #   { text: '2', formatting: formatting },
@@ -61,7 +61,7 @@ module Docx
         end
       end
 
-      # 一整批插入到书签后面，可以为各个断落定自己的样式
+      # 【新增方法】 一整批插入到书签后面，可以为各个段落定自己的样式。 Oliver.chen 2022-02-11
       #
       # formatting = {
       #   italic: false,
@@ -76,7 +76,14 @@ module Docx
       # base_doc.bookmarks['notes'].insert_multiple_lines_with_formatting([
       #   {text: '第一句'},
       #   {text: '第二句', formatting: formatting},
-      #   {text: '第三句'}
+      #   {text: '第三句'},
+      #   {
+      #     texts: [
+      #       {text: '第一部分', formatting: {italic: true}},
+      #       {text: '第二部分', formatting: {color: 'FF0000'},
+      #       {text: '第三部分', formatting: {underline: true}}
+      #     ]
+      #   }
       # ])
       #
       # Note:
@@ -99,8 +106,24 @@ module Docx
 
         # Insert text into corresponding newly created paragraphs
         paragraphs.each_index do |index|
-          paragraphs[index].apply_formatting(text_array[index][:formatting])
-          paragraphs[index].set_text(text_array[index][:text], text_array[index][:formatting])
+          # 如果有 texts，则以这个为主，忽略 text + formatting 属性。
+          # 因为在 texts，会包含更加详细文字与样式。
+          # 这样就可以支持同一个段落，不同文字带有不同的样式。
+          # {
+          #   texts: [
+          #     { text: 'A', formatting: formatting },
+          #     { text: 'B', formatting: formatting },
+          #     { text: 'C', formatting: formatting },
+          #   ]
+          # }
+          texts = text_array[index][:texts]
+          if texts
+            paragraphs[index].set_multi_texts(texts)
+          else
+            # 一整段使用相同的样式。
+            paragraphs[index].apply_formatting(text_array[index][:formatting])
+            paragraphs[index].set_text(text_array[index][:text], text_array[index][:formatting])
+          end
         end
       end
 

@@ -39,11 +39,37 @@ module Docx
           end
         end
 
-        # Set text of paragraph with formatting
-        # 打补丁，使用 set_text 支持 formatting
+        #【新增方法】使用 set_text 支持 formatting。Oliver.chen 2022-02-11
         def set_text(content, formatting = {})
           self.text = content
           text_runs.each { |tr| tr.apply_formatting(formatting) }
+        end
+
+        #【新增方法】设置不同样式的文字。Oliver.chen 2022-02-11
+        #
+        # texts = [
+        #   { text: 'A', formatting: formatting },
+        #   { text: 'B', formatting: formatting },
+        #   { text: 'C', formatting: formatting },
+        # ]
+        # 注意：该方法会清掉原来段落的内容。不是追加内容，而是重写。
+        def set_multi_texts(texts = [])
+          # 先清掉原有的文字
+          text_runs.each {|r| r.node.remove }
+
+          len = texts.size
+          return if len == 0
+
+          new_r = TextRun.create_within(self)
+          new_r.set_text(texts[0][:text], texts[0][:formatting])
+
+          for i in 1..(len - 1)
+            another_new_r = Containers::TextRun.create_with(self)
+            another_new_r.set_text(texts[i][:text], texts[i][:formatting])
+            another_new_r.insert_after(new_r)
+
+            new_r = another_new_r
+          end
         end
 
         # Return text of paragraph
