@@ -40,12 +40,18 @@ module Docx
           apply_formatting(formatting)
         end
 
+        #【新增】支持插入时，保留文字前后的空格。Oliver.chen 2022-03-18
         # Set text of text run
         def text=(content)
           if @text_nodes.size == 1
+            # 保留文字的前后空格，而不是自动去掉
+            @text_nodes.first.node["xml:space"] = "preserve"
             @text_nodes.first.content = content
           elsif @text_nodes.empty?
             new_t = Elements::Text.create_within(self)
+
+            # 保留文字的前后空格，而不是自动去掉
+            new_t.node["xml:space"] = "preserve"
             new_t.content = content
           end
         end

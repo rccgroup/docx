@@ -55,7 +55,7 @@ module Docx
         # 注意：该方法会清掉原来段落的内容。不是追加内容，而是重写。
         def set_multi_texts(texts = [])
           # 先清掉原有的文字
-          text_runs.each {|r| r.node.remove }
+          text_runs.each { |r| r.node.remove }
 
           len = texts.size
           return if len == 0
